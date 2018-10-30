@@ -9,6 +9,7 @@ import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
+import e.josephmolina.risingtimer.Util.NotificationUtil
 import e.josephmolina.risingtimer.Util.PrefUtil
 
 import kotlinx.android.synthetic.main.activity_timer.*
@@ -87,8 +88,7 @@ class TimerActivity : AppCompatActivity() {
         initTimer()
 
         removeAlarm(this)
-        //TODO: hide notification
-
+        NotificationUtil.hideTimerNotification(this)
     }
 
     private fun initTimer() {
@@ -103,7 +103,6 @@ class TimerActivity : AppCompatActivity() {
         else
             timerLengthSeconds
 
-        //TODO: Change secondsRemaining according to where the background timer stopped
         val alarmSetTime = PrefUtil.getAlarmSetTime(this)
         if (alarmSetTime > 0) {
             secondsRemaining -= nowSeconds - alarmSetTime
@@ -128,6 +127,7 @@ class TimerActivity : AppCompatActivity() {
         progress_countdown.progress = 0
         PrefUtil.setSecondsRemaining(timerLengthSeconds, this)
         secondsRemaining = timerLengthSeconds
+
         updateButtons()
         updateCountdownUI()
     }
@@ -193,9 +193,10 @@ class TimerActivity : AppCompatActivity() {
         if (timerState == TimerState.Running) {
             timer.cancel()
             val wakeupTime = setAlarm(this, nowSeconds, secondsRemaining)
-            //TODO: show notification
+            NotificationUtil.showTimerRunning(this, wakeupTime)
+
         } else if (timerState == TimerState.Paused) {
-            //TODO:  show notification
+            NotificationUtil.showTimerPaused(this)
         }
 
         PrefUtil.setPreviousTimerLengthSeconds(timerLengthSeconds, this)
