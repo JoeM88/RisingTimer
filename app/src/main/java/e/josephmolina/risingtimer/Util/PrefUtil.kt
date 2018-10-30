@@ -1,15 +1,16 @@
 package e.josephmolina.risingtimer.Util
 
 import android.content.Context
-import android.preference.Preference
 import android.preference.PreferenceManager
 import e.josephmolina.risingtimer.TimerActivity
 
 class PrefUtil {
     companion object {
+        private const val TIMER_LENGTH_ID = "e.josephmolina.risingtimer.timer.timer_length"
+
         fun getTimerLength(context: Context): Int {
-            // placeholder
-            return 1
+            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+            return preferences.getInt(TIMER_LENGTH_ID, 10)
         }
 
         private const val PREVIOUS_TIMER_LENGTH_SECONDS_ID = "e.josephmolina.risingtimer.previous_timer_length"
